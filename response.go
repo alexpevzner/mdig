@@ -47,7 +47,7 @@ func responseAppend(section, data []dns.RR) []dns.RR {
 		// TODO: if eventually we will want to include these
 		// records, their formatting needs to be revisited
 		//
-		// (*dns.OPT) String() loogs to be unreliable for
+		// (*dns.OPT) String() looks to be unreliable for
 		// these records:
 		//
 		// --------------------------------------------------

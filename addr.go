@@ -4,7 +4,6 @@
 // See LICENSE for license terms and conditions
 //
 // Functions for IP addresses
-// Check for local IP addresses
 
 package main
 

@@ -38,7 +38,10 @@ func QueryRun() []dns.Question {
 		LogDebug("Using IPv6 interface: %s", iface.Name)
 	}
 
-	// Create unicast sockets, one socket per local address
+	// Create unicast sockets, one socket per local address.
+	// These sockets are used for:
+	//   - sending mDNS queries
+	//   - receiving unicast responses
 	conns := []*net.UDPConn{}
 
 	conf := &net.ListenConfig{
@@ -80,7 +83,9 @@ func QueryRun() []dns.Question {
 		conns = append(conns, conn.(*net.UDPConn))
 	}
 
-	// Create multicast sockets, one socket per interface
+	// Create multicast sockets, one socket per interface.
+	//
+	// These sockets are used for receiving multicast responses.
 	mcast4 := &net.UDPAddr{IP: net.ParseIP("224.0.0.251"), Port: 5353}
 	mcast6 := &net.UDPAddr{IP: net.ParseIP("ff02::fb"), Port: 5353}
 
@@ -153,7 +158,7 @@ func QueryRun() []dns.Question {
 	return rq.Question
 }
 
-// queryNewQuestion creates q new request message
+// queryNewQuestion creates a new request message
 func queryNewRequest() *dns.Msg {
 	rq := &dns.Msg{}
 
@@ -216,7 +221,7 @@ func queryRecv(conn *net.UDPConn, wait *sync.WaitGroup) {
 			continue
 		}
 
-		// Process receiver response
+		// Process received response
 		ResponseInput(rsp)
 	}
 }
